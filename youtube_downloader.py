@@ -1,17 +1,24 @@
 from pytube import YouTube
 
-def download_audio(link):
+def Download(link):
     try:
-        youtube_object = YouTube(link)
-        audio_stream = youtube_object.streams.filter(only_audio=True).first()
+        youtubeObject = YouTube(link)
+        streams = youtubeObject.streams.filter(progressive=True)
         
-        print("Downloading audio...")
-        audio_stream.download(filename="audio")
-        print("Audio download completed successfully.")
+        print("Available video qualities:")
+        for i, stream in enumerate(streams):
+            print(f"{i+1}. {stream.resolution}")
+        
+        choice = int(input("Enter the number corresponding to the video quality you want to download: "))
+        selected_stream = streams[choice - 1]
+        
+        print("Downloading...")
+        selected_stream.download()
+        print("Download completed successfully.")
         
     except Exception as e:
-        print("An error occurred while downloading audio:", str(e))
+        print("An error occurred while downloading:", str(e))
 
 if __name__ == "__main__":
     link = input("Enter the YouTube video URL: ")
-    download_audio(link)
+    Download(link)
